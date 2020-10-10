@@ -10,16 +10,40 @@ const ProductContext = React.createContext();
 class ProductProvider extends Component {
 
     state = {
-        products: storeProducts,
+        products: [],
         detailProduct,
     }
+    componentDidMount() 
+    {
+        this.setProduct();
+    }
+    //This method will fix the reference problem
+    setProduct = () => {
+        let tempProducts = [];
+        storeProducts.forEach(item => {
+            const singleItem = {...item};
+            tempProducts = [...tempProducts, singleItem];
 
-    handleDetail = () => {
-        console.log("hello from details");
+        })
+        this.setState(() => {
+            return { products: tempProducts }
+        })
     }
 
-    addToCart = () => {
-        console.log("hello from cart");
+    getItem = (id) => {
+        const product = this.state.products.find(item => item.id === id)
+        return product;
+    }
+    handleDetail = (id) => {
+        //console.log("hello from details");
+        const product = this.getItem(id);
+        this.setState(() => {
+            return {detailProduct:product}
+        })
+    }
+
+    addToCart = (id) => {
+        console.log(`Item has been added to cart, id is: ${id}`);
     }
 
     render() {
